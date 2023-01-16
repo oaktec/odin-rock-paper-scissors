@@ -12,7 +12,8 @@ function getComputerChoice() {
     }
 }
 
-function playRound(playerSelection, computerSelection) {
+function playRound(playerSelection) {
+    let computerSelection = getComputerChoice();
     playerSelection = playerSelection.toLowerCase()
     playerSelection = playerSelection.slice(0,1).toUpperCase() + playerSelection.slice(1,playerSelection.length)
 
@@ -41,57 +42,52 @@ function playRound(playerSelection, computerSelection) {
     }
     switch(winner) {
         case "player":
-            console.log(`You Win! ${playerSelection} beats ${computerSelection}`);
+            lastResultPara.textContent = `You Win! ${playerSelection} beats ${computerSelection}`;
             break;
         case "computer":
-            console.log(`You Lose! ${computerSelection} beats ${playerSelection}`);
+            lastResultPara.textContent = `You Lose! ${computerSelection} beats ${playerSelection}`;
             break;
         case "tie":
-            console.log(`You Tie! ${playerSelection} ties with ${computerSelection}`);
+            lastResultPara.textContent = `You Tie! ${playerSelection} ties with ${computerSelection}`;
             break;
     }    
-    return winner;
+    processRound(winner);
 }
 
-function game() {
-    let playerScore = 0;
-    let computerScore = 0;
-
-    for (let i = 0; i < 5; i++) {
-        if (i > 0) {
-            printRoundInfo(playerScore, computerScore)
-        }
-        let winner = playRound(getPlayerChoice(), getComputerChoice())
-        if (winner === "player") {
-            playerScore++;
-        } else if (winner === "computer") {
-            computerScore++;
-        }
-        // Break loop if deficit is greater than number of rounds left
-        if (Math.abs(playerScore - computerScore) > 4 - i) {
-            break;
-        }
+function processRound(winner) {
+    if (winner === "player") {
+        playerScore++;
+    } else if (winner === "computer") {
+        computerScore++;
     }
-    printWinner(playerScore, computerScore)
+    totalScorePara.textContent = `Player ${playerScore} - ${computerScore} Computer`;
+
+    if (playerScore == 5 || computerScore == 5) {
+        gameOver();
+    }
 }
 
-function getPlayerChoice() {
-    return prompt("Rock/Paper/Scissors?")
-}
-
-function printRoundInfo(playerScore, computerScore) {
-    console.log(`Current score : ${playerScore} - ${computerScore}`)
-}
-
-function printWinner(playerScore, computerScore) {
-    console.log("--------")
-    console.log("Game finished!")
-    console.log(`Final score : ${playerScore} - ${computerScore}`)
+function gameOver() {
+    totalScorePara.textContent = `Player ${playerScore} - ${computerScore} Computer`;
+    let result = "";
     if (playerScore > computerScore) {
-        console.log("YOU WIN!")
-    } else if (computerScore > playerScore) {
-        console.log("YOU LOSE!")
+        result = "YOU WIN!";
     } else {
-        console.log("TIE!")
+        result = "YOU LOSE!";
     }
+    finalResultPara.textContent = result;
 }
+
+const rockButton = document.querySelector("button.rock");
+rockButton.addEventListener("click", (e) => playRound("rock"));
+const scissorsButton = document.querySelector("button.scissors");
+scissorsButton.addEventListener("click", (e) => playRound("scissors"));
+const paperButton = document.querySelector("button.paper");
+paperButton.addEventListener("click", (e) => playRound("paper"));
+
+const lastResultPara = document.querySelector("div .lastResult");
+const totalScorePara = document.querySelector("div .totalScore");
+const finalResultPara = document.querySelector("div .finalResult");
+
+let playerScore = 0;
+let computerScore = 0;
