@@ -76,14 +76,27 @@ function gameOver() {
         result = "YOU LOSE!";
     }
     finalResultPara.textContent = result;
+    rockButton.removeEventListener("click", rockEventHandler);
+    scissorsButton.removeEventListener("click", scissorsEventHandler);
+    paperButton.removeEventListener("click", paperEventHandler);
+}
+
+function rockEventHandler() {
+    playRound("rock");
+}
+function scissorsEventHandler() {
+    playRound("scissors");
+}
+function paperEventHandler() {
+    playRound("paper");
 }
 
 const rockButton = document.querySelector("button.rock");
-rockButton.addEventListener("click", (e) => playRound("rock"));
+rockButton.addEventListener("click", rockEventHandler);
 const scissorsButton = document.querySelector("button.scissors");
-scissorsButton.addEventListener("click", (e) => playRound("scissors"));
+scissorsButton.addEventListener("click", scissorsEventHandler);
 const paperButton = document.querySelector("button.paper");
-paperButton.addEventListener("click", (e) => playRound("paper"));
+paperButton.addEventListener("click", paperEventHandler);
 
 const lastResultPara = document.querySelector("div .lastResult");
 const totalScorePara = document.querySelector("div .totalScore");
